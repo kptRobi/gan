@@ -1,24 +1,18 @@
-import tensorflow as tf
-import numpy as np
 import tensorflow_datasets as tfds
-from matplotlib import pyplot as plt
 
-from utils import setup_gpu
+from utils import setup_gpu, normalize_image
 
-print("Hello woraaaald")
+print("STARTING MAIN")
 
-#setup
+# setup
 setup_gpu()
+
+# data pipeline
 data_set = tfds.load('fashion_mnist', split='train')
-iterator = data_set.as_numpy_iterator()
-# Setup the subplot formatting
-fig, ax = plt.subplots(ncols=4, figsize=(20,20))
-# Loop four times and get images
-for idx in range(4):
-    # Grab an image and label
-    sample = iterator.next()
-    # Plot the image using a specific subplot
-    ax[idx].imshow(np.squeeze(sample['image']))
-    # Appending the image label as the plot title
-    ax[idx].title.set_text(sample['label'])
-plt.show()
+data_set = data_set.map(normalize_image)
+data_set = data_set.cache()
+data_set = data_set.shuffle(60000)
+data_set = data_set.batch(128)
+data_set = data_set.prefetch(64)
+
+print(data_set.as_numpy_iterator().next().shape)
