@@ -3,6 +3,7 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, Dense, Flatten, Reshape, LeakyReLU, Dropout, UpSampling2D
 
+from config import NUMBER_OF_EPOCHS
 from gan_model import *
 from generator import *
 from discriminator import *
@@ -22,6 +23,7 @@ discriminator = build_discriminator()
 
 gan_model = GanModel(generator=generator,
                      discriminator=discriminator)
+
 gan_model.compile(generator_opt=generator_opt,
                   generator_loss=generator_loss,
                   discriminator_opt=discriminator_opt,

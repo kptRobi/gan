@@ -1,15 +1,13 @@
+from config import NUMBER_OF_IMAGES
 from generator import *
 from discriminator import *
 from utils import *
 from development import *
 
-# CONFIG:
-number_of_images = 3
-
 # TEST GENERATORA
 test_generator = build_generator()
 print(test_generator.summary())
-img = test_generator.predict(np.random.randn(number_of_images, 128))
+img = test_generator.predict(np.random.randn(NUMBER_OF_IMAGES, LATENT_DIM))
 visualise_images(img)
 
 # TESTY DYSKRYMINATORA
