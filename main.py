@@ -1,16 +1,12 @@
-import shutil
-
 import tensorflow_datasets as tfds
-from tensorflow.keras.losses import BinaryCrossentropy
-from tensorflow.keras.optimizers import Adam
-
 from config import NUMBER_OF_EPOCHS
 from discriminator import *
 from gan_model import *
 from generator import *
-from model_monitor import ModelMonitor
+from callbacks import ModelMonitor, checkpoint_callback
+from tensorflow.keras.losses import BinaryCrossentropy
+from tensorflow.keras.optimizers import Adam
 from utils import *
-import shutil
 
 print("STARTING MAIN")
 
@@ -43,7 +39,7 @@ gan_model.compile(generator_opt=generator_opt,
                   discriminator_opt=discriminator_opt,
                   discriminator_loss=discriminator_loss)
 
-hist = gan_model.fit(data_set, epochs=NUMBER_OF_EPOCHS, callbacks=[ModelMonitor()])
+hist = gan_model.fit(data_set, epochs=NUMBER_OF_EPOCHS, callbacks=[ModelMonitor(), checkpoint_callback])
 
 generator.save('save/generator.h5')
 discriminator.save('save/discriminator.h5')

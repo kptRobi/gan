@@ -1,11 +1,18 @@
 import os
 
 import tensorflow as tf
+from keras.callbacks import ModelCheckpoint
 from tensorflow.keras.callbacks import Callback
 from tensorflow.keras.preprocessing.image import array_to_img
 
 from config import LATENT_DIM, NUMBER_OF_IMAGES
 
+
+checkpoint_callback = ModelCheckpoint(
+    filepath='checkpoints/weights-{epoch:04d}-{}.h5',
+    save_weights_only=True,
+    verbose=1
+)
 
 class ModelMonitor(Callback):
     def __init__(self, num_img=NUMBER_OF_IMAGES, latent_dim=LATENT_DIM):
@@ -20,3 +27,4 @@ class ModelMonitor(Callback):
         for i in range(self.num_img):
             img = array_to_img(generated_images[i])
             img.save(os.path.join('images', f'generated_img_{epoch}_{i}.png'))
+
