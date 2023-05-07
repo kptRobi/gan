@@ -1,3 +1,5 @@
+import shutil
+
 import tensorflow_datasets as tfds
 from tensorflow.keras.losses import BinaryCrossentropy
 from tensorflow.keras.optimizers import Adam
@@ -8,11 +10,13 @@ from gan_model import *
 from generator import *
 from model_monitor import ModelMonitor
 from utils import *
+import shutil
 
 print("STARTING MAIN")
 
 # setup
 setup_gpu()
+delete_old_images()
 
 # data pipeline
 data_set = tfds.load('fashion_mnist', split='train')

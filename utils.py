@@ -1,3 +1,6 @@
+import os
+import shutil
+
 import numpy as np
 import tensorflow as tf
 from matplotlib import pyplot as plt
@@ -26,3 +29,14 @@ def visualise_images(img):
         # Appending the image label as the plot title
         ax[idx].title.set_text(idx)
     plt.show()
+
+def delete_old_images():
+    folder_path = "images"
+    if os.path.exists(folder_path):  # sprawdzenie, czy folder istnieje
+        for file_name in os.listdir(folder_path):  # pętla po plikach w folderze
+            file_path = os.path.join(folder_path, file_name)  # pełna ścieżka do pliku
+            if os.path.isfile(file_path):  # sprawdzenie, czy plik jest plikiem
+                os.remove(file_path)  # usunięcie pliku
+        print("Zawartość folderu usunięta")
+    else:
+        print("Folder nie istnieje")

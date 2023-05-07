@@ -1,8 +1,6 @@
 import tensorflow as tf
 from tensorflow.keras.models import Model
 
-from config import NOISE, LATENT_DIM
-
 
 class GanModel(Model):
     def __init__(self, generator, discriminator, *args, **kwargs):
@@ -24,7 +22,7 @@ class GanModel(Model):
         fake_images = self.generator(tf.random.normal((128, 128)), training=False)
 
         # TRAINING THE DISCRIMINATOR
-        with tf.GradientTape() as discrriminator_tape:
+        with tf.GradientTape() as discriminator_tape:
             real_images_predictions = self.discriminator(real_images, training=True)
             fake_images_predictions = self.discriminator(fake_images, training=True)
             concatenated_predictions = tf.concat([real_images_predictions, fake_images_predictions], axis=0)
@@ -34,21 +32,21 @@ class GanModel(Model):
                 axis=0)
 
             # noise TODO wypróbować różne wartości
-            noise_real = 0.15*tf.random.uniform(tf.shape(real_images_predictions))
-            noise_fake = -0.15*tf.random.uniform(tf.shape(fake_images_predictions))
-            concatenated_predictions += tf.concat([noise_real, noise_fake], axis=0)
+            noise_real = 0.15 * tf.random.uniform(tf.shape(real_images_predictions))
+            noise_fake = -0.15 * tf.random.uniform(tf.shape(fake_images_predictions))
+            concatenated_labels += tf.concat([noise_real, noise_fake], axis=0)
 
             total_discriminator_loss = self.discriminator_loss(concatenated_labels, concatenated_predictions)
 
         # liczy gradient TODO doczytać
-        discriminator_gradient = discrriminator_tape.gradient(total_discriminator_loss,
-                                                              self.discriminator.trainable_variables)
+        discriminator_gradient = discriminator_tape.gradient(total_discriminator_loss,
+                                                             self.discriminator.trainable_variables)
         # TODO czy to jest backpropagation?
         self.discriminator_opt.apply_gradients(zip(discriminator_gradient, self.discriminator.trainable_variables))
 
         # TRAINING THE GENERATOR
         with tf.GradientTape() as generator_tape:
-            generated_images = self.generator(tf.random.normal((128,128)), training=True)
+            generated_images = self.generator(tf.random.normal((128, 128)), training=True)
 
             predicted_labels = self.discriminator(generated_images, training=False)
 
