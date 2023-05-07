@@ -8,8 +8,9 @@ from gan_model import *
 from generator import *
 from model_monitor import ModelMonitor
 from utils import *
-
+from datetime import datetime
 print("STARTING MAIN")
+print(datetime.now())
 
 # setup
 setup_gpu()
@@ -36,3 +37,7 @@ gan_model = GanModel(generator, discriminator)
 gan_model.compile(g_opt, d_opt, g_loss, d_loss)
 
 hist = gan_model.fit(data_set, epochs=NUMBER_OF_EPOCHS, callbacks=[ModelMonitor()])
+print("ENDING MAIN")
+print(datetime.now())
+generator.save('save/generator.h5')
+discriminator.save('save/discriminator.h5')
