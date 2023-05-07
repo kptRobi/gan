@@ -28,6 +28,7 @@ class GanModel(Model):
             real_images_predictions = self.discriminator(real_images, training=True)
             fake_images_predictions = self.discriminator(fake_images, training=True)
             concatenated_predictions = tf.concat([real_images_predictions, fake_images_predictions], axis=0)
+
             concatenated_labels = tf.concat(
                 [tf.zeros_like(real_images_predictions), tf.ones_like(fake_images_predictions)],
                 axis=0)
@@ -48,9 +49,10 @@ class GanModel(Model):
         # TRAINING THE GENERATOR
         with tf.GradientTape() as generator_tape:
             generated_images = self.generator(tf.random.normal((128,128)), training=True)
+
             predicted_labels = self.discriminator(generated_images, training=False)
 
-            total_generator_loss = self.generator_loss(tf.ones_like(predicted_labels), predicted_labels)
+            total_generator_loss = self.generator_loss(tf.zeros_like(predicted_labels), predicted_labels)
 
         generator_gradient = generator_tape.gradient(total_generator_loss, self.generator.trainable_variables)
         # TODO czy to jest backpropagation?

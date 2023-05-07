@@ -40,3 +40,6 @@ gan_model.compile(generator_opt=generator_opt,
                   discriminator_loss=discriminator_loss)
 
 hist = gan_model.fit(data_set, epochs=NUMBER_OF_EPOCHS, callbacks=[ModelMonitor()])
+
+generator.save('save/generator.h5')
+discriminator.save('save/discriminator.h5')
