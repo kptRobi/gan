@@ -3,9 +3,11 @@ from config import NUMBER_OF_EPOCHS
 from discriminator import *
 from gan_model import *
 from generator import *
-from callbacks import ModelMonitor, checkpoint_callback
+from monitor_callback import ModelMonitor
 from tensorflow.keras.losses import BinaryCrossentropy
 from tensorflow.keras.optimizers import Adam
+
+from save_callback import SaveWeights
 from utils import *
 
 print("STARTING MAIN")
@@ -31,15 +33,29 @@ discriminator_loss = BinaryCrossentropy()
 generator = build_generator()
 discriminator = build_discriminator()
 
-gan_model = GanModel(generator=generator,
-                     discriminator=discriminator)
+# Ładowanie checkpointu lub zaczynanie od zera jeśli folder jest pusty
+if not os.listdir('load_checkpoint_from_here'):
 
-gan_model.compile(generator_opt=generator_opt,
+    gan_model = GanModel(generator=generator,
+                        discriminator=discriminator)
+
+    gan_model.compile(generator_opt=generator_opt,
                   generator_loss=generator_loss,
                   discriminator_opt=discriminator_opt,
                   discriminator_loss=discriminator_loss)
 
-hist = gan_model.fit(data_set, epochs=NUMBER_OF_EPOCHS, callbacks=[ModelMonitor(), checkpoint_callback])
+    hist = gan_model.fit(data_set, epochs=NUMBER_OF_EPOCHS, callbacks=[ModelMonitor(), SaveWeights()])
+else:
+    generator.load_weights("load_checkpoint_from_here/generator.cpkt")
+    discriminator.load_weights("load_checkpoint_from_here/discriminator.cpkt")
 
-generator.save('save/generator.h5')
-discriminator.save('save/discriminator.h5')
+    gan_model = GanModel(generator=generator,
+                         discriminator=discriminator)
+
+    gan_model.compile(generator_opt=generator_opt,
+                      generator_loss=generator_loss,
+                      discriminator_opt=discriminator_opt,
+                      discriminator_loss=discriminator_loss)
+
+    hist = gan_model.fit(data_set, epochs=NUMBER_OF_EPOCHS, callbacks=[ModelMonitor(), SaveWeights()])
+
