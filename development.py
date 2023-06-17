@@ -18,7 +18,7 @@ generator_opt = Adam(learning_rate=0.0001)
 generator_loss = BinaryCrossentropy()
 discriminator_opt = Adam(learning_rate=0.00001)
 discriminator_loss = BinaryCrossentropy()
-generator = build_generator()
+generator = build_encoder()
 discriminator = build_discriminator()
 
 gan_model = GanModel(generator=generator,
