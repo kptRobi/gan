@@ -31,7 +31,7 @@ def visualise_images(img):
     plt.show()
 
 def delete_old_images():
-    folder_path = "images"
+    folder_path = "../images"
     if os.path.exists(folder_path):  # sprawdzenie, czy folder istnieje
         for file_name in os.listdir(folder_path):  # pętla po plikach w folderze
             file_path = os.path.join(folder_path, file_name)  # pełna ścieżka do pliku

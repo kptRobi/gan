@@ -1,11 +1,8 @@
 from config import NUMBER_OF_IMAGES
-from generator import *
-from discriminator import *
-from utils import *
 from development import *
 
 # TEST GENERATORA
-test_generator = build_generator()
+test_generator = build_encoder()
 print(test_generator.summary())
 img = test_generator.predict(np.random.randn(NUMBER_OF_IMAGES, LATENT_DIM))
 visualise_images(img)

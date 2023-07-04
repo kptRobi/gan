@@ -1,13 +1,13 @@
 import tensorflow_datasets as tfds
 from config import NUMBER_OF_EPOCHS
-from discriminator import *
+from model_builders.discriminator import *
 from gan_model import *
-from generator import *
-from monitor_callback import ModelMonitor
+from model_builders.generator import *
+from callbacks.monitor_callback import ModelMonitor
 from tensorflow.keras.losses import BinaryCrossentropy
 from tensorflow.keras.optimizers import Adam
 
-from save_callback import SaveWeights
+from callbacks.save_callback import SaveWeights
 from utils import *
 
 print("STARTING MAIN")
@@ -30,11 +30,11 @@ generator_opt = Adam(learning_rate=0.0001)
 generator_loss = BinaryCrossentropy()
 discriminator_opt = Adam(learning_rate=0.00001)
 discriminator_loss = BinaryCrossentropy()
-generator = build_generator()
+generator = build_encoder()
 discriminator = build_discriminator()
 
 # Ładowanie checkpointu lub zaczynanie od zera jeśli folder jest pusty
-if not os.listdir('load_checkpoint_from_here'):
+if not os.listdir('../load_checkpoint_from_here'):
 
     gan_model = GanModel(generator=generator,
                         discriminator=discriminator)
