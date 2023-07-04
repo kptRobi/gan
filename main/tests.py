@@ -1,7 +1,4 @@
 from config import NUMBER_OF_IMAGES
-from generator import *
-from discriminator import *
-from utils import *
 from development import *
 
 # TEST GENERATORA

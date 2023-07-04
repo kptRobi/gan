@@ -19,5 +19,5 @@ class ModelMonitor(Callback):
         generated_images.numpy()
         for i in range(self.num_img):
             img = array_to_img(generated_images[i])
-            img.save(os.path.join('images', f'generated_img_{epoch}_{i}.png'))
+            img.save(os.path.join('../images', f'generated_img_{epoch}_{i}.png'))
 
