@@ -8,7 +8,7 @@ from tensorflow.keras.losses import BinaryCrossentropy
 from tensorflow.keras.optimizers import Adam
 
 from callbacks.save_callback import SaveWeights
-from utils import *
+from main.utils.utils import *
 
 print("STARTING MAIN")
 
