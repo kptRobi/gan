@@ -1,8 +1,8 @@
 import tensorflow as tf
-from tensorflow.keras.models import Model
+import tensorflow.keras as keras
 
 
-class GanModel(Model):
+class GanModel(keras.Model):
     def __init__(self, generator, discriminator, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

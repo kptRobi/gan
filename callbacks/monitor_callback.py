@@ -5,10 +5,12 @@ from keras.callbacks import ModelCheckpoint
 from tensorflow.keras.callbacks import Callback
 from tensorflow.keras.preprocessing.image import array_to_img
 from datetime import date
-from config import LATENT_DIM, NUMBER_OF_IMAGES
+
+from config import config
+
 
 class ModelMonitor(Callback):
-    def __init__(self, num_img=NUMBER_OF_IMAGES, latent_dim=LATENT_DIM):
+    def __init__(self, num_img=config.NUMBER_OF_IMAGES, latent_dim=config.LATENT_DIM):
         self.num_img = num_img
         self.latent_dim = latent_dim
 
