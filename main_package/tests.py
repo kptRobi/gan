@@ -1,9 +1,11 @@
+import keras.utils
 import tensorflow_datasets as tfds
 from tensorflow.keras.losses import BinaryCrossentropy
 from tensorflow.keras.optimizers import Adam
 
 from main_package.gan_model import GanModel
 from main_package.utils_package.utils import normalize_image
+from model_builders.discriminator import build_discriminator
 from model_builders.generator import build_generator
 
 print("STARTING MAIN")
@@ -23,12 +25,20 @@ generator_loss = BinaryCrossentropy()
 discriminator_opt = Adam(learning_rate=0.00001)
 discriminator_loss = BinaryCrossentropy()
 generator = build_generator()
-discriminator = None
+discriminator = build_discriminator()
 
+inputs= keras.Input(shape=(64,))
+outputs= keras.Input(shape=(64,))
 gan_model = GanModel(generator=generator,
-                     discriminator=discriminator)
+                     discriminator=discriminator,
+                     inputs=inputs,
+                     outputs=outputs)
 
 gan_model.compile(generator_opt=generator_opt,
                   generator_loss=generator_loss,
                   discriminator_opt=discriminator_opt,
                   discriminator_loss=discriminator_loss)
+#
+gan_model.build(input_shape=(28, 28, 1))
+gan_model.summary()
+keras.utils.plot_model(gan_model, "gan_model.png", show_shapes=True)

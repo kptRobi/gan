@@ -1,12 +1,14 @@
 from keras import Input, Model
 from keras.layers import Conv2D, Flatten, Dense, Reshape
 
+from config import config
+
 
 # TODO
 # - pooling?
 # -
 
-def build_generator():
+def build_discriminator():
     image_input = Input(shape=(28, 28, 1), name="image_input")
 
     # blok 1
@@ -17,11 +19,11 @@ def build_generator():
     d = Conv2D(512, 4, activation='relu')(d)
 
     patch_logits = Conv2D(3, 1)(d)
-    patch_logits = Reshape()(patch_logits)
+    patch_logits = Reshape(target_shape=(-1, 3))(patch_logits)
 
     logits = Flatten()(d)
-    logits = Dense()(logits)
-    logits = Dense()(logits)
+    logits = Dense(config.BOTTLENECK_SIZE)(logits)
+    logits = Dense(config.NUMBER_OF_CLASSES)(logits)
 
     discriminator = Model(inputs=[image_input],
                           outputs=[patch_logits, logits],

@@ -75,23 +75,23 @@ def build_generator():
     d = Conv2D(64, 5, padding='same')(d)
     decoded_image = Activation(activations.tanh)(d)
 
-    # WARP KONTROLER
-
-    # blok 1
-    w = Flatten()(feature_map)
-    w = Dense(11)(w)
-
-    # punkty
-    ldmark_pred = Dense(11)(w)
-
-    # przemieszczenia
-    ldmark_diff = Dense(11)(w)
-
-    warp_input = identity(decoded_image, name='warp_input')
-    src_pts = reshape(ldmark_pred, [-1, config.NUMBER_OF_LANDMARKS, 2])
-    dst_pts = reshape(ldmark_pred + ldmark_diff, [-1, config.NUMBER_OF_LANDMARKS, 2])
-
-    images_transformed, dense_flow = sparse_image_warp(warp_input, src_pts, dst_pts, regularization_weight = 1e-6, num_boundary_points=0)
-    # images_transformed = None
-    generator = Model(image_input, images_transformed, name="generator")
+    # # WARP KONTROLER
+    #
+    # # blok 1
+    # w = Flatten()(feature_map)
+    # w = Dense(11)(w)
+    #
+    # # punkty
+    # ldmark_pred = Dense(11)(w)
+    #
+    # # przemieszczenia
+    # ldmark_diff = Dense(11)(w)
+    #
+    # warp_input = identity(decoded_image, name='warp_input')
+    # src_pts = reshape(ldmark_pred, [-1, config.NUMBER_OF_LANDMARKS, 2])
+    # dst_pts = reshape(ldmark_pred + ldmark_diff, [-1, config.NUMBER_OF_LANDMARKS, 2])
+    #
+    # images_transformed, dense_flow = sparse_image_warp(warp_input, src_pts, dst_pts, regularization_weight = 1e-6, num_boundary_points=0)
+    # # images_transformed = None
+    generator = Model(image_input, decoded_image, name="generator")
     return generator

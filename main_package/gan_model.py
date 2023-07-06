@@ -17,6 +17,9 @@ class GanModel(keras.Model):
         self.discriminator_opt = discriminator_opt
         self.discriminator_loss = discriminator_loss
 
+    # def call(self, ): # TODO sprawidzć co to robi
+    #     super().call()
+
     def train_step(self, batch):
         real_images = batch
         fake_images = self.generator(tf.random.normal((128, 128)), training=False)
