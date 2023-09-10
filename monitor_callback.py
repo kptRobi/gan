@@ -8,7 +8,7 @@ from datetime import date
 from config import LATENT_DIM, NUMBER_OF_IMAGES
 
 class ModelMonitor(Callback):
-    def __init__(self, num_img=NUMBER_OF_IMAGES, latent_dim=LATENT_DIM):
+    def __init__(self, num_img=9, latent_dim=LATENT_DIM):
         self.num_img = num_img
         self.latent_dim = latent_dim
 
@@ -19,5 +19,6 @@ class ModelMonitor(Callback):
         generated_images.numpy()
         for i in range(self.num_img):
             img = array_to_img(generated_images[i])
-            img.save(os.path.join('images', f'generated_img_{epoch}_{i}.png'))
+            epoch_str = "{:04d}".format(epoch)
+            img.save(f'/data/fashion-gan/img/image_{epoch_str}_{i}.png')
 

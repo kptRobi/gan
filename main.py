@@ -59,3 +59,4 @@ else:
 
     hist = gan_model.fit(data_set, epochs=NUMBER_OF_EPOCHS, callbacks=[ModelMonitor(), SaveWeights()])
 
+np.save(f'/data/fashion-gan/history/history.npy', hist.history)
