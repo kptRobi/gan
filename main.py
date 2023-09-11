@@ -1,5 +1,5 @@
 import tensorflow_datasets as tfds
-from config import NUMBER_OF_EPOCHS
+from config import NUMBER_OF_EPOCHS, FASHION_PATH
 from discriminator import *
 from gan_model import *
 from generator import *
@@ -14,10 +14,9 @@ print("STARTING MAIN")
 
 # setup
 setup_gpu()
-delete_old_images()
 
 # data pipeline
-data_set = tfds.load('fashion_mnist', split='train')
+data_set = tfds.load('fashion_mnist')
 data_set = data_set.map(normalize_image)
 data_set = data_set.cache()
 data_set = data_set.shuffle(60000)
@@ -33,30 +32,14 @@ discriminator_loss = BinaryCrossentropy()
 generator = build_generator()
 discriminator = build_discriminator()
 
-# Ładowanie checkpointu lub zaczynanie od zera jeśli folder jest pusty
-if not os.listdir('load_checkpoint_from_here'):
+gan_model = GanModel(generator=generator,
+                     discriminator=discriminator)
 
-    gan_model = GanModel(generator=generator,
-                        discriminator=discriminator)
-
-    gan_model.compile(generator_opt=generator_opt,
+gan_model.compile(generator_opt=generator_opt,
                   generator_loss=generator_loss,
                   discriminator_opt=discriminator_opt,
                   discriminator_loss=discriminator_loss)
 
-    hist = gan_model.fit(data_set, epochs=NUMBER_OF_EPOCHS, callbacks=[ModelMonitor(), SaveWeights()])
-else:
-    generator.load_weights("load_checkpoint_from_here/generator.cpkt")
-    discriminator.load_weights("load_checkpoint_from_here/discriminator.cpkt")
+hist = gan_model.fit(data_set, epochs=1, callbacks=[ModelMonitor(), SaveWeights()])
 
-    gan_model = GanModel(generator=generator,
-                         discriminator=discriminator)
-
-    gan_model.compile(generator_opt=generator_opt,
-                      generator_loss=generator_loss,
-                      discriminator_opt=discriminator_opt,
-                      discriminator_loss=discriminator_loss)
-
-    hist = gan_model.fit(data_set, epochs=NUMBER_OF_EPOCHS, callbacks=[ModelMonitor(), SaveWeights()])
-
-np.save(f'/data/fashion-gan/history/history.npy', hist.history)
+np.save(f'{FASHION_PATH}history/history.npy', hist.history)

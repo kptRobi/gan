@@ -5,7 +5,8 @@ from keras.callbacks import ModelCheckpoint
 from tensorflow.keras.callbacks import Callback
 from tensorflow.keras.preprocessing.image import array_to_img
 from datetime import date
-from config import LATENT_DIM, NUMBER_OF_IMAGES
+from config import LATENT_DIM, NUMBER_OF_IMAGES, FASHION_PATH
+
 
 class ModelMonitor(Callback):
     def __init__(self, num_img=9, latent_dim=LATENT_DIM):
@@ -20,5 +21,5 @@ class ModelMonitor(Callback):
         for i in range(self.num_img):
             img = array_to_img(generated_images[i])
             epoch_str = "{:04d}".format(epoch)
-            img.save(f'/data/fashion-gan/img/image_{epoch_str}_{i}.png')
+            img.save(f'{FASHION_PATH}img/image_{epoch_str}_{i}.png')
 
